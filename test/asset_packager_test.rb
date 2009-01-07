@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../../../../config/environment'
 require 'test/unit'
 require 'mocha'
 
-$asset_packages_yml = YAML.load_file("#{RAILS_ROOT}/vendor/plugins/asset_packager/test/asset_packages.yml")
+$asset_packages_yml = YAML.load(ERB.new(File.read("#{RAILS_ROOT}/vendor/plugins/asset_packager/test/asset_packages.yml")).result)
 $asset_base_path = "#{RAILS_ROOT}/vendor/plugins/asset_packager/test/assets"
 
 class AssetPackagerTest < Test::Unit::TestCase
@@ -19,7 +19,7 @@ class AssetPackagerTest < Test::Unit::TestCase
   
   def test_find_by_type
     js_asset_packages = Synthesis::AssetPackage.find_by_type("javascripts")
-    assert_equal 2, js_asset_packages.length
+    assert_equal 3, js_asset_packages.length
     assert_equal "base", js_asset_packages[0].target
     assert_equal ["prototype", "effects", "controls", "dragdrop"], js_asset_packages[0].sources
   end
@@ -51,7 +51,7 @@ class AssetPackagerTest < Test::Unit::TestCase
     css_package_names = Dir.new("#{$asset_base_path}/stylesheets").entries.delete_if { |x| ! (x =~ /\A\w+_packaged.css/) }.sort
     css_subdir_package_names = Dir.new("#{$asset_base_path}/stylesheets/subdir").entries.delete_if { |x| ! (x =~ /\A\w+_packaged.css/) }.sort
     
-    assert_equal 2, js_package_names.length
+    assert_equal 3, js_package_names.length
     assert_equal 2, css_package_names.length
     assert_equal 1, css_subdir_package_names.length
     assert js_package_names[0].match(/\Abase_packaged.js\z/)
@@ -87,6 +87,5 @@ class AssetPackagerTest < Test::Unit::TestCase
   def test_should_only_return_production_merge_environment_when_not_set
     assert_equal ["production"], Synthesis::AssetPackage.merge_environments
   end
-
-  
+    
 end

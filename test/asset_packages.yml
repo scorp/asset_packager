@@ -8,6 +8,12 @@ javascripts:
   - foo
   - bar
   - application
+- tertiary:
+  - baz
+<% if RAILS_ENV.match(/dev/i) %>
+  - debug
+<% end %>
+  
 stylesheets:
 - base:
   - screen

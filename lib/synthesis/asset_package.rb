@@ -3,7 +3,7 @@ module Synthesis
 
     # class variables
     @@asset_packages_yml = $asset_packages_yml || 
-      (File.exists?("#{RAILS_ROOT}/config/asset_packages.yml") ? YAML.load_file(ERB.new(File.read("#{RAILS_ROOT}/config/asset_packages.yml")).result : nil)
+      (File.exists?("#{RAILS_ROOT}/config/asset_packages.yml") ? YAML.load(ERB.new(IO.read("#{RAILS_ROOT}/config/asset_packages.yml")).result) : nil)
   
     # singleton methods
     class << self
